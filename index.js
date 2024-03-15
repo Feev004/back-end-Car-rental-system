@@ -501,6 +501,5 @@ app.delete("/rental/:id", (req, res) => {
     });
 });
 //connect server
-app.listen(3000, () => {
-  console.log("connect server");
-});
+const port = process.env.PORT || 3000
+app.listen(port,()=> console.log(`Listening on port ${port}`))
