@@ -123,20 +123,6 @@ app.get("/getuser", (req, res) => {
       res.status(500).send(err);
     });
 });
-
-app.get("/admincreatecar", (req, res) => {
-  car
-    .findAll()
-    .then((data) => {
-      if (data) {
-        res.json(data);
-      }
-    })
-    .catch((err) => {
-      res.status(500).send(err);
-    });
-});
-
 app.get("/history", (req, res) => {
   rental
     .findAll()
@@ -228,19 +214,6 @@ app.get("/showcar/:id", (req, res) => {
     });
 });
 
-app.get("/admincar", (req, res) => {
-  rental
-    .findAll()
-    .then((data) => {
-      if (data) {
-        res.json(data);
-      }
-    })
-    .catch((err) => {
-      res.status(500).send(err);
-    });
-});
-
 app.post("/payment", (req, res) => {
   console.log(req.body);
   payment
@@ -294,11 +267,10 @@ app.get("/rental", (req, res) => {
 
 app.get("/rental/:id", (req, res) => {
   rental
-    .findByPk(req.params.id)
+    .findOne({where:{userid:req.params.id}})
     .then((data) => {
       res.json(data);
     })
-    .catch((err) => {});
 });
 
 app.get("/receipt/:id", (req, res) => {
@@ -308,6 +280,18 @@ app.get("/receipt/:id", (req, res) => {
       res.json(data);
     })
     .catch((err) => {});
+});
+
+app.put("/inserttotalrental/:id",(req,res) => {
+  console.log(req.params.id)
+  console.log(req.body)
+  rental.findOne({where:{userid:req.params.id}}).then(data => {
+    data.update({rentaltotal:req.body.price}).then(() => {
+      //
+    })
+    //console.log(data)
+  })
+  res.json({})
 });
 
 app.post("/rental", (req, res) => {
@@ -516,22 +500,6 @@ app.delete("/rental/:id", (req, res) => {
       res.status(500).send(err);
     });
 });
-// app.put('/showcar/:id',(req,res)=>{
-//     car.findByPk(req.params.id).then(car =>{
-//         if(!car){
-//             res.status.send('Bookn not found')
-//         }else{
-//             user.update(req.body).then(()=>{
-//                 res.send(car)
-//             }).catch(err=>{
-//                 res.status(500).send(err)
-//             })
-//         }
-//     }).catch(err=>{
-//         res.status(500).send(err)
-//     })
-// })
-
 //connect server
 app.listen(3000, () => {
   console.log("connect server");
